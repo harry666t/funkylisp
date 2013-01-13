@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Funky Lisp</title>
+    <meta name="keywords" content="lisp,funk,repl" >
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="fl.js"></script>
+    <script type="text/javascript">
+      var tips = [
+          "Use <tt>(help)</tt> to list all symbols, \
+           <tt>(help <em>symbol</em>)</tt> to get some help on a symbol",
+          "The best funk band around is \
+           <a href='http://lakilan.pl'>Łąki Łan</a>.",
+          "Looking for strings, I/O, hashtables, goodies? Nope. Not yet.",
+          "Lisp code is data. Turn your metaprogramming skills to use.",
+          "Press <em>Shift+Enter</em> to insert a line break",
+          "Funky Lisp is quite Quick&Dirty, JavaScript keeps lurking in.",
+          "No error goes ignored, but not many errors make sense. \
+           Use your smarts if something goes wrong.",
+          "TODO: Macros.",
+          "Funky Lisp is inspired by \
+           <a href='http://schemers.org/'>Scheme</a>.",
+          ("Send love, praise, blame, feedback, cookies and monies to: \
+           <a href='mailto:harry666t+gmail.com'>harry666t+gmail.com</a>"
+           .replace(/\+/g, '@')),
+          "Annoyed by these tips? <tt>(disable-tips)</tt>",
+      ];
+      function random_tip() {
+          var tip = document.getElementById("tip");
+          tip.innerHTML = ("<em>Pro Tip: </em>" +
+                           tips[Math.floor(Math.random() * tips.length)]);
+      }
+      function setup() {
+          var input = document.getElementById("input");
+          var backlog = document.getElementById("backlog");
+
+          function log_append(content, options) {
+              var pre = document.createElement("pre");
+              options = options || {};
+              pre.textContent = content;
+              pre.className = options.cls;
+              pre.id = options.id;
+              backlog.appendChild(pre);
+          }
+          input.onkeydown = function(ev) {
+              if (ev.keyCode == 13 && !ev.shiftKey)
+                  return false;
+          };
+          input.onkeyup = function(ev) {
+              if (ev.keyCode != 13 || ev.shiftKey) // enter
+                  return;
+              log_append(input.value, {cls: "in"});
+              try {
+                  log_append(fl.rep(input.value), {cls: "out"});
+              } catch (e) {
+                  log_append(e.toString(), {cls: "err"});
+              }
+              input.value = '()';
+              input.setSelectionRange(1,1);
+              random_tip();
+              input.scrollIntoViewIfNeeded();
+          };
+
+          random_tip();
+
+          input.focus();
+          input.setSelectionRange(1,1);
+          log_append("Funky Lisp Ready.", {cls: "out"});
+      };
+    </script>
+  </head>
+  <body onload="setup()">
+    <div id="backlog"></div>
+    <textarea id="input">()</textarea>
+    <span id="tip"></span>
+  </body>
+</html>

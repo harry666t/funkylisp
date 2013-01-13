@@ -1,0 +1,31 @@
+div pre {
+    padding: 0;
+    margin: 0;
+}
+.in {
+    color: gray;
+}
+.out {
+    color: black;
+    padding-left: 2em;
+}
+.err {
+    color: red;
+    padding-left: 2em;
+}
+#backlog {
+    background: #fafaff;
+    padding: 0;
+}
+#input {
+    background: #fafaff;
+    border-color: #fafaff;
+    width: 100%;
+    font-size: 1em;
+    font-family: monospace, monospace;
+}
+#tip {
+    color: gray;
+    font-size: 0.8em;
+    float: right;
+}
