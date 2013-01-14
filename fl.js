@@ -130,9 +130,7 @@ fl.print = function(e) {
 };
 
 fl.eval = function(env, e) {
-    if (!e)
-        return [];
-    else if (typeof e === "string")
+    if (typeof e === "string")
         return fl.getenv(env, e);
     else if (typeof e === "number")
         return e;
