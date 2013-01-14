@@ -84,6 +84,7 @@ fl.tokenize = function(s) {
     return (s
             .replace(/\(/g, " ( ")
             .replace(/\)/g, " ) ")
+            .replace(/'/g, " ' ")
             .split(/[ \n\r\t]+/g)
             .filter(fl.id));
 };
@@ -99,7 +100,9 @@ fl.read_tokens = function(ts) {
         }
         fl.assert(ts.shift() ===  ")");
         return l;
-    } else if (")" === t)
+    } else if ("'" === t)
+        return ['quote', fl.read_tokens(ts)];
+    else if (")" === t)
         throw new Error("Unexpected ')'");
     else return fl.atom(t);
 };
