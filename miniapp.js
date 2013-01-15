@@ -38,6 +38,8 @@ function run(request, response) {
             url.parse(request.url).pathname
         );
         var result = handler(request);
+        if (result.status === undefined)
+            result.status = 200;
         if (result.headers === undefined)
             result.headers = {};
         if (result.headers["Content-Type"] === undefined)
@@ -48,7 +50,7 @@ function run(request, response) {
                 result.type !== undefined? result.type        :
                 undefined
             );
-        response.writeHead(result.status || 200, result.headers);
+        response.writeHead(result.status, result.headers);
         response.write(
             result.html !== undefined? result.html                 :
             result.text !== undefined? result.text                 :
@@ -56,9 +58,11 @@ function run(request, response) {
             result.data !== undefined? result.data                 :
             ""
         );
+        console.log(request.method, request.url, result.status);
     } catch (e) {
         response.writeHead(500, {"Content-Type": "text/plain"});
         response.write("500 Internal Server Error: " + e);
+        console.log(request.method, request.url, 500);
     }
     response.end();
 };
