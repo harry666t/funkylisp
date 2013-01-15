@@ -3,6 +3,9 @@ var url = require("url");
 
 var routes = {};
 
+// TODO: generate HEAD from GET handlers
+// TODO: answer OPTIONS requests
+
 function error_not_found(request) {
     return {
         status: 404,
@@ -17,10 +20,29 @@ function error_method_not_allowed(request) {
     };
 }
 
-function route(method, url, handler) {
+function route(methods, url, handler) {
+    if (typeof methods === "string")
+        methods = [methods];
     if (routes[url] === undefined)
         routes[url] = {};
-    routes[url][method] = handler;
+    for (var i = 0; i < methods.length; i++)
+        routes[url][methods[i]] = handler;
+}
+
+route.get = function get(url, handler) {
+    return route("GET", url, handler);
+}
+
+route.post = function post(url, handler) {
+    return route("POST", url, handler);
+}
+
+route.put = function put(url, handler) {
+    return route("PUT", url, handler);
+}
+
+route.del = function del(url, handler) {
+    return route("DELETE", url, handler);
 }
 
 function get_handler(method, url) {
@@ -62,7 +84,7 @@ function run(request, response) {
     } catch (e) {
         response.writeHead(500, {"Content-Type": "text/plain"});
         response.write("500 Internal Server Error: " + e);
-        console.log(request.method, request.url, 500);
+        console.log(request.method, request.url, 500, e);
     }
     response.end();
 };
