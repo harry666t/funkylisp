@@ -3,20 +3,20 @@ var http    = require("http");
 var fs      = require("fs");
 var miniapp = require("./miniapp");
 
-miniapp.route("GET", "/", function (request) {
+miniapp.route.get("/", function (request) {
     return {
         html: fs.readFileSync("fl.html"),
     };
 });
 
-miniapp.route("GET", "/style.css", function (request) {
+miniapp.route.get("/style.css", function (request) {
     return {
         data: fs.readFileSync("style.css"),
         type: "text/css",
     };
 });
 
-miniapp.route("GET", "/fl.js", function (request) {
+miniapp.route.get("/fl.js", function (request) {
     return {
         data: fs.readFileSync("fl.js"),
         type: "text/javascript",
