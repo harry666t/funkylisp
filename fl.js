@@ -193,3 +193,7 @@ fl.print(fl.eval(fl.global_env, fl.read_tokens(fl.tokenize('\
 fl.rep = function(s) {
     return fl.print(fl.eval(fl.global_env, fl.read_tokens(fl.tokenize(s))));
 };
+
+if (exports !== undefined)
+    for (var i in fl)
+        exports[i] = fl[i];
