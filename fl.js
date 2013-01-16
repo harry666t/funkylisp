@@ -1,13 +1,9 @@
 "use strict";
 
-if (!Array.prototype.first)
-    Array.prototype.first = function() {return this[0];};
+var array = {};
 
-if (!Array.prototype.rest)
-    Array.prototype.rest = function() {return this.slice(1);};
-
-if (!Array.prototype.last)
-    Array.prototype.last = function() {return this[this.length - 1]};
+array.rest = function rest(a) {return a.slice(1);};
+array.last = function last(a) {return a[a.length - 1]};
 
 var fl = {};
 
@@ -32,10 +28,10 @@ fl.global_env = {
         return xs;
     },
     "first": function(env, xs) {
-        return xs.first();
+        return xs[0];
     },
     "rest": function(env, xs) {
-        return xs.rest();
+        return array.rest(xs);
     },
     "nth": function(env, xs) {
         fl.assert(xs.length == 2);
@@ -137,18 +133,18 @@ fl.eval = function(env, e) {
     else {
         // eval in current env
         var eval_ice = function (x) {return fl.eval(env, x);};
-        var first = e.first(), rest = e.rest();
+        var first = e[0], rest = array.rest(e);
         if (!first && first === undefined)
             return e;
         switch (first) {
         case "quote":
             return rest[0];
         case "do":
-            return rest.map(eval_ice).last();
+            return array.last(rest.map(eval_ice));
         case "define":
         case "set!":
-            var name = rest.first();
-            var val  = eval_ice(rest.rest().first());
+            var name = rest[0];
+            var val  = eval_ice(rest[1]);
             var update_env = (first === "define")? fl.defenv : fl.setenv;
             update_env(env, name, val);
             return val;
