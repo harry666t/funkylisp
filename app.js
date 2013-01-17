@@ -23,4 +23,5 @@ miniapp.route.get("/fl.js", function (request) {
     };
 });
 
-http.createServer(miniapp.run).listen(8080);
+var port = process.env.PORT || 8080;
+http.createServer(miniapp.run).listen(port);
